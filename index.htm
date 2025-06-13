@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart, Safe & Honest — A Tulane Student’s Guide to Using Generative AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles & Tulane Color Palette */
+        :root {
+            --tulane-olive: #416D50;
+            --tulane-sky-blue: #83D2E4;
+            --dark-bg: #1A241E;
+            --card-bg: #233329;
+            --border-color: #354e3d;
+            --text-light: #E5E7EB;
+            --text-muted: #9CA3AF;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--dark-bg); color: var(--text-light); }
+        .section-card { background-color: var(--card-bg); border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; border: 1px solid var(--border-color); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .section-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3); }
+
+        /* Modal, Accordion, Scroll Animation */
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); z-index: 50; opacity: 0; pointer-events: none; transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+        .modal-content.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+        .faq-answer, .rule-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-in-out; }
+        .faq-answer.open, .rule-detail.open { grid-template-rows: 1fr; }
+        .faq-answer > div, .rule-detail > div { overflow: hidden; }
+        .animate-on-scroll { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+        .tab.active { background-color: var(--tulane-olive); color: white; }
+        .checkbox-label input:checked ~ .checkbox-icon { background-color: var(--tulane-sky-blue); border-color: var(--tulane-sky-blue); }
+        .checkbox-label input:checked ~ .checkbox-icon svg { display: block; }
+
+        /* Drag & Drop Styles */
+        .draggable { cursor: grab; }
+        .draggable.dragging { opacity: 0.5; cursor: grabbing; }
+        .drop-zone { border: 2px dashed var(--border-color); transition: background-color 0.2s, border-color 0.2s; }
+        .drop-zone.drag-over { background-color: rgba(131, 210, 228, 0.1); border-color: var(--tulane-sky-blue); }
+        
+        /* Quiz Styles */
+        .quiz-option:hover { background-color: #354e3d; }
+        .quiz-feedback { display: none; }
+        .quiz-feedback.show { display: block; }
+        
+        /* Utility Tool Styles */
+        .form-input { background-color: #1E2D24; border: 1px solid var(--border-color); color: var(--text-light); }
+        .copy-btn { background-color: #354e3d; }
+        .copy-btn:hover { background-color: var(--tulane-olive); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="py-12 px-4 text-center">
+        <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight">Smart, Safe & Honest</h1>
+        <p class="mt-4 text-xl md:text-2xl font-light" style="color: var(--tulane-sky-blue);">A Tulane Student’s Guide to Using Generative AI</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pb-16">
+
+        <!-- Quick-Start Card -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">1</span>Quick-Start Card</h2>
+            <!-- Content unchanged -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-[#2a3b2f] p-6 rounded-lg border border-green-500/50"> <h3 class="text-2xl font-bold text-green-400 mb-4 flex items-center"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Do </h3> <ul class="space-y-3 text-gray-300"> <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Use AI for brainstorming, explaining tough ideas, or polishing draft wording.</li> <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Check every fact, citation, code snippet, or translation an AI gives you.</li> <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Add a short disclosure + citation whenever AI meaningfully shapes your submission.</li> <li class="flex items-start"><span class="text-green-400 mr-2 mt-1">✓</span> Use Tulane-approved tools or turn off “chat-history & training” in public models.</li> </ul> </div>
+                <div class="bg-[#2a3b2f] p-6 rounded-lg border border-red-500/50"> <h3 class="text-2xl font-bold text-red-400 mb-4 flex items-center"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Don’t </h3> <ul class="space-y-3 text-gray-300"> <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Paste exam questions or entire assignments into AI during closed-book tests.</li> <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Submit raw AI output as “your” work.</li> <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Hide your AI use or claim it as wholly original.</li> <li class="flex items-start"><span class="text-red-400 mr-2 mt-1">✗</span> Upload confidential, HIPAA/FERPA, or unpublished research data.</li> </ul> </div>
+            </div>
+        </section>
+
+        <!-- Golden Rules -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">2</span>The Four Golden Rules</h2>
+            <div class="space-y-4" id="rules-container"></div>
+        </section>
+        
+        <!-- NEW: Faculty Corner -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">3</span>A Note From Faculty</h2>
+            <div class="bg-[#2a3b2f] p-6 rounded-lg border border-[var(--border-color)]">
+                <blockquote class="text-lg text-gray-300 italic">"We see AI as a powerful cognitive tool, much like a calculator or a library database. The goal is not to avoid it, but to use it ethically and transparently to deepen your own analysis. Show us how you used the tool to arrive at *your* unique insights."</blockquote>
+                <p class="text-right mt-4 text-gray-400 font-semibold">— Representative Tulane Professor, School of Liberal Arts</p>
+            </div>
+        </section>
+
+        <!-- NEW: Scenario Quiz -->
+        <section class="section-card animate-on-scroll" id="scenario-quiz">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">4</span>Check Your Understanding: AI Scenarios</h2>
+            <div id="quiz-container" class="bg-[#2a3b2f] p-6 rounded-lg">
+                <!-- Quiz content injected by JS -->
+            </div>
+            <div id="quiz-feedback-correct" class="quiz-feedback mt-4 p-4 rounded-lg bg-green-900/50 border border-green-500/50 text-green-300">
+                <h4 class="font-bold">Correct!</h4>
+                <p id="feedback-text-correct"></p>
+            </div>
+            <div id="quiz-feedback-incorrect" class="quiz-feedback mt-4 p-4 rounded-lg bg-red-900/50 border border-red-500/50 text-red-300">
+                <h4 class="font-bold">Not Quite.</h4>
+                <p id="feedback-text-incorrect"></p>
+            </div>
+        </section>
+        
+        <!-- NEW: Drag & Drop Sorter -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">5</span>Substantive vs. Incidental Use</h2>
+            <p class="text-gray-400 mb-4">Drag each AI task into the correct category to test your knowledge. Substantive use requires disclosure.</p>
+            <div class="mb-6 p-4 rounded-lg bg-[#2a3b2f]">
+                <h4 class="font-bold text-center text-gray-400 mb-2">Tasks to Sort</h4>
+                <div id="draggable-items" class="flex flex-wrap gap-3 justify-center">
+                    <!-- Draggable items injected by JS -->
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="p-4 bg-[#2a3b2f] rounded-lg">
+                    <h3 class="font-bold text-yellow-400 text-center mb-2">Substantive Use (Disclose)</h3>
+                    <div id="substantive-zone" class="drop-zone min-h-[100px] p-2 rounded-lg space-y-2"></div>
+                </div>
+                <div class="p-4 bg-[#2a3b2f] rounded-lg">
+                    <h3 class="font-bold text-green-400 text-center mb-2">Incidental Use (No Disclosure)</h3>
+                    <div id="incidental-zone" class="drop-zone min-h-[100px] p-2 rounded-lg space-y-2"></div>
+                </div>
+            </div>
+            <p id="sorter-feedback" class="text-center mt-4 h-5 font-bold"></p>
+        </section>
+        
+        <!-- NEW: Citation & Disclosure Tools -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">6</span>Citation & Disclosure Tools</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Citation Generator -->
+                <div>
+                    <h3 class="font-bold text-xl text-white mb-2">Citation Generator</h3>
+                    <p class="text-gray-400 mb-4">Fill out the form to generate a citation.</p>
+                    <div class="space-y-4">
+                        <input id="cg-tool" type="text" placeholder="AI Tool (e.g., ChatGPT-4o)" class="form-input w-full p-2 rounded-md">
+                        <input id="cg-date" type="text" placeholder="Date (e.g., 13 June 2025)" class="form-input w-full p-2 rounded-md">
+                        <textarea id="cg-prompt" placeholder="Briefly describe your prompt..." class="form-input w-full p-2 rounded-md" rows="2"></textarea>
+                    </div>
+                    <div id="cg-output" class="mt-4 space-y-3"></div>
+                </div>
+                <!-- Disclosure Builder -->
+                <div>
+                    <h3 class="font-bold text-xl text-white mb-2">Disclosure Statement Builder</h3>
+                    <p class="text-gray-400 mb-4">Check the boxes that apply to build a template.</p>
+                    <div id="db-options" class="space-y-2">
+                        <!-- Options injected by JS -->
+                    </div>
+                    <div class="mt-4">
+                        <textarea id="db-output" rows="4" class="form-input w-full p-2 rounded-md" placeholder="Your disclosure statement will appear here..."></textarea>
+                        <button id="db-copy-btn" class="w-full mt-2 text-white font-bold py-2 px-4 rounded-lg copy-btn">Copy Statement</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pre-Submission Checklist -->
+        <section class="section-card animate-on-scroll">
+             <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">7</span>Pre-Submission Checklist</h2>
+            <div class="space-y-4" id="checklist-items"></div>
+            <div class="mt-6 flex justify-between items-center">
+                <p class="text-gray-400">Progress:</p>
+                <div class="w-full bg-[#354e3d] rounded-full h-2.5 ml-4 mr-4"><div id="progress-bar" class="bg-[#83D2E4] h-2.5 rounded-full" style="width: 0%; transition: width 0.5s ease;"></div></div>
+                <span id="progress-text" class="font-bold text-white">0/5</span>
+            </div>
+            <p id="checklist-complete-feedback" class="text-center mt-4 h-5 font-bold text-green-400"></p>
+        </section>
+        
+        <!-- NEW: Where to Get Help -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">8</span>Where to Get Help at Tulane</h2>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <a href="https://library.tulane.edu/" target="_blank" class="block p-4 bg-[#2a3b2f] rounded-lg hover:bg-[#354e3d] transition">
+                    <h4 class="font-bold text-white">Howard-Tilton Library</h4><p class="text-sm text-gray-400">For fact-checking & citation help.</p>
+                </a>
+                <a href="https://ctl.tulane.edu/" target="_blank" class="block p-4 bg-[#2a3b2f] rounded-lg hover:bg-[#354e3d] transition">
+                    <h4 class="font-bold text-white">Center for Learning & Teaching</h4><p class="text-sm text-gray-400">For prompt-craft & critical AI literacy.</p>
+                </a>
+                <a href="https://it.tulane.edu/security" target="_blank" class="block p-4 bg-[#2a3b2f] rounded-lg hover:bg-[#354e3d] transition">
+                    <h4 class="font-bold text-white">Tulane IT Security</h4><p class="text-sm text-gray-400">For data-security advice.</p>
+                </a>
+                <a href="https://tulane.instructure.com/courses/2218331" target="_blank" class="block p-4 bg-[#2a3b2f] rounded-lg hover:bg-[#354e3d] transition">
+                    <h4 class="font-bold text-white">Code of Academic Conduct</h4><p class="text-sm text-gray-400">For official policies and procedures.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section-card animate-on-scroll">
+            <h2 class="text-2xl font-bold mb-6 text-white flex items-center"><span class="bg-[#416D50] text-white rounded-full h-8 w-8 flex items-center justify-center mr-3 shrink-0 font-black text-lg">9</span>FAQ (Fast Answers)</h2>
+            <div class="space-y-3" id="faq-container"></div>
+        </section>
+    </main>
+    
+    <footer class="text-center py-10 border-t border-[var(--border-color)]">
+        <p class="text-2xl font-bold tracking-wider text-white">Assist <span style="color: var(--tulane-sky-blue);">&bull;</span> Acknowledge <span style="color: var(--tulane-sky-blue);">&bull;</span> Authenticate</p>
+        <p class="text-gray-500 mt-2">Harness AI's power without risking your grade or integrity.</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Animate on Scroll ---
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+        // --- Golden Rules Accordion ---
+        const rules = [
+            { title: 'Integrity', detail: 'Your submission must reflect your understanding. Treat AI help like help from a classmate: allowed only when the assignment permits and never to the point of doing the work for you.' },
+            { title: 'Transparency', detail: 'Always say how AI helped. A two-line disclosure is enough. Oxford and Cornell require similar statements.' },
+            { title: 'Accountability', detail: 'You own any errors, hallucinated citations, or plagiarism an AI produces. Cornell reminds students: “You are accountable for your work, regardless of the tools you use.”' },
+            { title: 'Privacy & Data Security', detail: 'Never paste sensitive or proprietary data into public models. Harvard labels that a breach of policy.' },
+        ];
+        const rulesContainer = document.getElementById('rules-container');
+        rules.forEach(rule => {
+            const el = document.createElement('div');
+            el.className = 'bg-[#2a3b2f] rounded-lg border border-[var(--border-color)] cursor-pointer transition hover:bg-[#354e3d]';
+            el.innerHTML = `<div class="p-4 flex justify-between items-center rule-header"><h4 class="font-bold text-lg text-white">${rule.title}</h4><span class="text-2xl text-gray-400 transform transition-transform">+</span></div><div class="rule-detail px-4 text-gray-400"><div class="pb-4"><p>${rule.detail}</p></div></div>`;
+            rulesContainer.appendChild(el);
+        });
+        rulesContainer.addEventListener('click', e => {
+            const header = e.target.closest('.rule-header');
+            if (header) {
+                const detail = header.nextElementSibling;
+                detail.classList.toggle('open');
+                header.querySelector('span').style.transform = detail.classList.contains('open') ? 'rotate(45deg)' : 'rotate(0deg)';
+            }
+        });
+
+        // --- Scenario Quiz ---
+        const quizData = [
+            { question: "For a TIDES course, you use ChatGPT to brainstorm potential topics for your final reflection paper. Do you need to disclose this?", answer: "Allowed", explanation: "Correct! Brainstorming is a permitted use. Since the AI's ideas helped shape your work, a disclosure is required for transparency." },
+            { question: "You're stuck on a CELL-1010 lab report. You paste the experimental data into an AI and ask it to write the 'Results' and 'Discussion' sections, which you then submit. Is this okay?", answer: "Prohibited", explanation: "Correct. This is a serious academic integrity violation. Delegating core analytical work to an AI is equivalent to plagiarism." },
+            { question: "You use an AI tool to check your English essay for grammar and spelling mistakes, similar to Grammarly. Do you need to cite this?", answer: "Clarification", explanation: "Correct! This is a gray area. Basic grammar checks are usually fine (incidental), but advanced rewriting features are substantive. Best practice is to ask your instructor if you're unsure." }
+        ];
+        let currentQuestionIndex = 0;
+        const quizContainer = document.getElementById('quiz-container');
+        const feedbackCorrect = document.getElementById('quiz-feedback-correct');
+        const feedbackIncorrect = document.getElementById('quiz-feedback-incorrect');
+
+        function loadQuizQuestion() {
+            feedbackCorrect.style.display = 'none';
+            feedbackIncorrect.style.display = 'none';
+            if (currentQuestionIndex >= quizData.length) {
+                quizContainer.innerHTML = `<p class="text-center font-bold text-lg text-white">Quiz complete! You've reviewed all scenarios.</p>`;
+                return;
+            }
+            const q = quizData[currentQuestionIndex];
+            quizContainer.innerHTML = `
+                <p class="text-gray-400 mb-4">Scenario ${currentQuestionIndex + 1} of ${quizData.length}:</p>
+                <p class="font-semibold text-white mb-4">${q.question}</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <button data-answer="Allowed" class="quiz-option p-3 rounded-lg border border-green-500/50 text-green-400 font-bold transition">Allowed (with Disclosure)</button>
+                    <button data-answer="Prohibited" class="quiz-option p-3 rounded-lg border border-red-500/50 text-red-400 font-bold transition">Prohibited</button>
+                    <button data-answer="Clarification" class="quiz-option p-3 rounded-lg border border-yellow-500/50 text-yellow-400 font-bold transition">Needs Clarification</button>
+                </div>
+            `;
+        }
+        
+        quizContainer.addEventListener('click', e => {
+            if (e.target.matches('.quiz-option')) {
+                const selectedAnswer = e.target.dataset.answer;
+                const correctAnswer = quizData[currentQuestionIndex].answer;
+                const explanation = quizData[currentQuestionIndex].explanation;
+                if (selectedAnswer === correctAnswer) {
+                    document.getElementById('feedback-text-correct').textContent = explanation;
+                    feedbackCorrect.style.display = 'block';
+                } else {
+                    document.getElementById('feedback-text-incorrect').textContent = explanation;
+                    feedbackIncorrect.style.display = 'block';
+                }
+                currentQuestionIndex++;
+                setTimeout(loadQuizQuestion, 4000); // Load next question after 4s
+            }
+        });
+        loadQuizQuestion();
+
+        // --- Drag and Drop Sorter ---
+        const sorterTasks = [
+            { text: "Fixing a bug in my code", type: "substantive" },
+            { text: "Explaining a complex theory", type: "incidental" },
+            { text: "Generating an essay outline", type: "substantive" },
+            { text: "Rephrasing my sentences for clarity", type: "substantive" },
+            { text: "Translating a foreign phrase", type: "substantive" },
+            { text: "Asking for study questions", type: "incidental" }
+        ];
+        const draggableItemsContainer = document.getElementById('draggable-items');
+        sorterTasks.forEach((task, i) => {
+            const item = document.createElement('div');
+            item.id = `drag-${i}`;
+            item.className = 'draggable p-2 rounded-md text-sm text-white bg-[var(--tulane-olive)]';
+            item.draggable = true;
+            item.textContent = task.text;
+            item.dataset.type = task.type;
+            draggableItemsContainer.appendChild(item);
+        });
+        
+        const draggables = document.querySelectorAll('.draggable');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        const sorterFeedback = document.getElementById('sorter-feedback');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'));
+            draggable.addEventListener('dragend', () => draggable.classList.remove('dragging'));
+        });
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', e => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const draggable = document.querySelector('.dragging');
+                const correctZoneId = draggable.dataset.type + "-zone";
+                if (zone.id === correctZoneId) {
+                    zone.appendChild(draggable);
+                    draggable.draggable = false;
+                    draggable.style.cursor = 'default';
+                    draggable.style.backgroundColor = '#22c55e'; // Green
+                    sorterFeedback.textContent = 'Correct!';
+                    sorterFeedback.style.color = '#22c55e';
+                } else {
+                    sorterFeedback.textContent = 'Try again!';
+                    sorterFeedback.style.color = '#ef4444'; // Red
+                }
+                setTimeout(() => sorterFeedback.textContent = '', 2000);
+            });
+        });
+
+        // --- Citation & Disclosure Tools ---
+        const [cgTool, cgDate, cgPrompt] = [document.getElementById('cg-tool'), document.getElementById('cg-date'), document.getElementById('cg-prompt')];
+        const cgOutput = document.getElementById('cg-output');
+
+        function generateCitations() {
+            const tool = cgTool.value || "AI Tool";
+            const date = cgDate.value || "Date";
+            const prompt = cgPrompt.value || "Author's prompt";
+            const isGeneric = tool === "AI Tool";
+
+            cgOutput.innerHTML = `
+                ${renderCitation('MLA 9', `${isGeneric ? 'OpenAI' : tool}. ChatGPT response to ${prompt}, ${date}.`, isGeneric)}
+                ${renderCitation('APA 7', `${isGeneric ? 'OpenAI' : tool}. (${date}). ChatGPT response to prompt about [topic] [Large language model]. https://chat.openai.com/`, isGeneric)}
+                ${renderCitation('Chicago', `${isGeneric ? 'OpenAI' : tool}. "ChatGPT Response to Author," ${date}.`, isGeneric)}
+            `;
+        }
+
+        function renderCitation(style, text, disabled) {
+            return `<div class="bg-[#1E2D24] p-3 rounded-md"><h5 class="font-bold text-sm text-gray-400">${style}</h5><div class="flex justify-between items-center gap-2"><p class="text-sm text-gray-300 flex-grow">${text}</p><button ${disabled ? 'disabled' : ''} onclick="copyToClipboard(this, \`${text}\`)" class="copy-btn text-xs px-2 py-1 rounded-md shrink-0 disabled:opacity-50 disabled:cursor-not-allowed">Copy</button></div></div>`;
+        }
+
+        [cgTool, cgDate, cgPrompt].forEach(el => el.addEventListener('input', generateCitations));
+        generateCitations(); // Initial call
+        
+        // Disclosure Builder
+        const dbOptionsContainer = document.getElementById('db-options');
+        const dbOutput = document.getElementById('db-output');
+        const dbCopyBtn = document.getElementById('db-copy-btn');
+        const disclosureRoles = ["Generated draft outline", "Polished wording and grammar", "Simplified complex topics", "Brainstormed ideas", "Debugged code snippets"];
+        
+        disclosureRoles.forEach(role => {
+            dbOptionsContainer.innerHTML += `<label class="flex items-center text-sm text-gray-300"><input type="checkbox" class="db-role-check mr-2 bg-transparent border-gray-500 rounded text-[var(--tulane-sky-blue)] focus:ring-0"> ${role}</label>`;
+        });
+
+        function updateDisclosure() {
+            const tool = cgTool.value || "[AI Tool Name]";
+            const date = cgDate.value || "[Date]";
+            const checkedRoles = Array.from(document.querySelectorAll('.db-role-check:checked')).map(el => `<li>${el.nextSibling.textContent.trim()}</li>`).join('');
+            
+            dbOutput.value = `Statement of AI Assistance\n\nTool: ${tool} — Prompted ${date}.\n\nRole(s) of AI:\n${checkedRoles || "<li>[Describe how you used the AI]</li>"}\nEdits: Student verified all information, provided unique analysis, rewrote all key passages, and takes full responsibility for the final submission.`;
+        }
+        dbOptionsContainer.addEventListener('change', updateDisclosure);
+        [cgTool, cgDate].forEach(el => el.addEventListener('input', updateDisclosure));
+        dbCopyBtn.addEventListener('click', () => copyToClipboard(dbCopyBtn, dbOutput.value));
+        updateDisclosure();
+
+        // --- Checklist Gamification ---
+        const checklistItems = ['I verified every fact, quote, and reference from AI.', 'I rewrote or critically built upon AI text in my own voice.', 'My disclosure statement is included and complete.', 'I did not paste confidential or exam content into AI.', 'The syllabus explicitly permits my level of AI use.'];
+        const checklistContainer = document.getElementById('checklist-items');
+        checklistItems.forEach((item, i) => {
+            const el = document.createElement('label');
+            el.htmlFor = `check-${i}`;
+            el.className = 'checkbox-label flex items-center p-4 bg-[#2a3b2f] rounded-lg cursor-pointer hover:bg-[#354e3d] transition';
+            el.innerHTML = `<input type="checkbox" id="check-${i}" class="hidden"><span class="checkbox-icon h-6 w-6 rounded-md border-2 border-gray-500 shrink-0 mr-4 flex items-center justify-center transition"><svg class="h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg></span><span class="text-gray-300">${item}</span>`;
+            checklistContainer.appendChild(el);
+        });
+
+        const updateProgress = () => {
+            const checkboxes = checklistContainer.querySelectorAll('input');
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            const percentage = total > 0 ? (checkedCount / total) * 100 : 0;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${checkedCount}/${total}`;
+            document.getElementById('checklist-complete-feedback').textContent = (checkedCount === total) ? "All set! You're ready to submit responsibly." : "";
+        };
+        checklistContainer.addEventListener('change', updateProgress);
+        updateProgress();
+        
+        // --- FAQ Accordion ---
+        const faqs = [
+            { q: 'Can I use ChatGPT to translate my Spanish essay draft?', a: 'Yes—translation counts as substantive help, so include a disclosure and double-check accuracy.' },
+            { q: 'My instructor banned AI. What about Grammarly?', a: 'Advanced rewriting features use generative AI → prohibited if the syllabus says “No external AI tools.” Ask your instructor first to be safe.' },
+            { q: 'Do I need to cite AI for a one-word thesaurus suggestion?', a: 'No. Minor word swaps are considered incidental use, so no disclosure is needed.' }
+        ];
+        const faqContainer = document.getElementById('faq-container');
+        faqs.forEach(faq => {
+            const el = document.createElement('div');
+            el.className = 'bg-[#2a3b2f] rounded-lg border border-[var(--border-color)]';
+            el.innerHTML = `<button class="w-full text-left p-4 flex justify-between items-center faq-question"><span class="font-semibold text-white">${faq.q}</span><svg class="w-6 h-6 text-gray-400 transition-transform transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button><div class="faq-answer px-4 text-gray-400"><div class="pb-4"><p>${faq.a}</p></div></div>`;
+            faqContainer.appendChild(el);
+        });
+        faqContainer.addEventListener('click', e => {
+            const question = e.target.closest('.faq-question');
+            if (question) {
+                const answer = question.nextElementSibling;
+                answer.classList.toggle('open');
+                question.querySelector('svg').style.transform = answer.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        });
+    });
+
+    // --- Global Helper ---
+    function copyToClipboard(button, text) {
+        // Use the older execCommand for broader compatibility in iFrames
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => button.textContent = originalText, 2000);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+        document.body.removeChild(textarea);
+    }
+    </script>
+</body>
+</html>
